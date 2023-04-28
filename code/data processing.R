@@ -16,7 +16,7 @@ Plot.arrows <- function(x.corr, y.corr, col) {
     warning("Error! x and y lengths differ")
   }else{
     for(i in 2:length(x.corr)){
-      arrows(x.corr[i-1], y.corr[i-1], x.corr[i], y.corr[i],angle=30, length = 0.15, col = col)
+      arrows(x.corr[i-1], y.corr[i-1], x.corr[i], y.corr[i],angle=30, length = 0.15, col = col[i])
     }
   }
 }
@@ -284,6 +284,7 @@ SBL03.lag.cor.s <- cor.test(SBL03.lag$X.13C, SBL03.lag$X.18O, method = "spearman
 SBL03.lag.cor.k # Significant *
 SBL03.lag.cor.s # Significant *
 
+#######import data from Yang et al. 2020, Phacochoerus from Mpala, KE###### 
 #####load in previously published data####
 Yang.2020 <- read.csv("data/Yang et al 2020.csv") #data from this study
 
@@ -353,7 +354,7 @@ MPL2M.lag.cor.s <- cor.test(MPL2M.lag$X.13C, MPL2M.lag$X.18O, method = "spearman
 MPL2M.lag.cor.k # Significant *
 MPL2M.lag.cor.s # Significant *
 
-
+#######import data from Reid et al. 2019, Phacochoerus from Naivasha, KE######
 #####load in previously published data####
 Reid.2019 <- read.csv("data/Reid et al 2019.csv") #data from this study
 
@@ -435,6 +436,7 @@ B58.2.lag.cor.k # NS
 B58.2.lag.cor.s # NS
 
 
+#####simple plot function######
 #in a combined plot, use regular plot function
 plot(P03$X.13C, P03$X.18O, main = "d13C - d18O corss plot",
      xlim = c(-12,1),ylim = c(-3,6),
@@ -443,6 +445,81 @@ Plot.arrows(P03$X.13C, P03$X.18O, col = "blue")
 points(P04$X.13C, P04$X.18O,
      pch = 16, col = "red")
 Plot.arrows(P04$X.13C, P04$X.18O, col = "red")
+
+#####advanced plot function######
+#arbitrarilly define seasons using d18O data
+#version 1: use diff(P03$X.18O)
+ind.P03.dry <- which(diff(P03$X.18O) > 0)
+
+ind.P03.rain <- which(diff(P03$X.18O) <= 0)
+
+#determine color bins
+bin.wd <- 0.3
+
+col.bins.P03.18O <- ceiling((max(diff(P03$X.18O))-min(diff(P03$X.18O)))/bin.wd) + 1
+
+col.P03.18O <- viridis(col.bins.P03.18O)
+
+P03.18O.plot.col <- c(1,col.P03.18O[ceiling((diff(P03$X.18O) + abs(min(diff(P03$X.18O))))/bin.wd) + 1])
+
+plot(P03$X.13C, P03$X.18O, main = "d13C - d18O corss plot",
+     xlim = c(-12,1),ylim = c(-3,6),
+     pch = 16, col = "black")
+Plot.arrows(P03$X.13C, P03$X.18O, col = P03.18O.plot.col)
+
+#version 1: use diff(P03$X.18O)
+
+ind.P03.dry <- which(diff(P03$X.18O) > 0)
+
+ind.P03.rain <- which(diff(P03$X.18O) <= 0)
+
+col.w.d <- viridis(5)
+
+col.dry <- col.w.d[4]
+
+col.rain <- col.w.d[2]
+
+#initialize vector
+P03.18O.plot.col <- rep(1,length(P03$X.18O))
+P03.18O.plot.col[ind.P03.dry + 1] <- col.dry
+P03.18O.plot.col[ind.P03.rain + 1] <- col.rain
+P03.18O.plot.col
+
+plot(P03$X.13C, P03$X.18O, main = "d13C - d18O corss plot",
+     xlim = c(-14,1),ylim = c(-6,6),
+     pch = 16, col = "black")
+Plot.arrows(P03$X.13C, P03$X.18O, col = P03.18O.plot.col)
+
+#version 1: use diff(P03$X.18O)
+
+ind.P04.dry <- which(diff(P04$X.18O) > 0)
+
+ind.P04.rain <- which(diff(P04$X.18O) <= 0)
+
+#initialize vector
+P04.18O.plot.col <- rep(1,length(P04$X.18O))
+P04.18O.plot.col[ind.P04.dry + 1] <- col.dry
+P04.18O.plot.col[ind.P04.rain + 1] <- col.rain
+P04.18O.plot.col
+
+points(P04$X.13C, P04$X.18O,
+     pch = 16, col = "black")
+Plot.arrows(P04$X.13C, P04$X.18O, col = P04.18O.plot.col)
+
+###############
+ind.P05.dry <- which(diff(P05$X.18O) > 0)
+
+ind.P05.rain <- which(diff(P05$X.18O) <= 0)
+
+#initialize vector
+P05.18O.plot.col <- rep(1,length(P05$X.18O))
+P05.18O.plot.col[ind.P05.dry + 1] <- col.dry
+P05.18O.plot.col[ind.P05.rain + 1] <- col.rain
+P05.18O.plot.col
+
+points(P05$X.13C, P05$X.18O,
+       pch = 16, col = "black")
+Plot.arrows(P05$X.13C, P05$X.18O, col = P05.18O.plot.col)
 
 
 P05 <- extant %>% filter(ID == ID.list[7])
@@ -476,31 +553,3 @@ rose.diag(P03.vtr.ang,bins=12)
 hist.P03.vtr <- hist(P03.vtr.ang,breaks=seq(-180,180,30))
 plot.P03.vtr <- data.frame(hist.P03.vtr$mids,hist.P03.vtr$density)
 colnames(plot.P03.vtr) <- c("mid","density")
-
-ggplot(plot.P03.vtr, aes(x=mid, y=density)) +
-  geom_bar(stat="identity") +
-  coord_polar(theta = "x", start = -pi/45)+
-  scale_x_continuous(breaks = seq(0, 360, 60))
-
-
-frequency()
-
-ggplot(wind, aes(x = DirCat, fill = SpeedCat)) +
-  geom_histogram(binwidth = 15, boundary = -7.5) +
-  coord_polar() +
-  scale_x_continuous(limits = c(0,360))
-
-#visualize vectors
-ggplot(P03, aes(x = X.13C, y = X.18O)) +
-  geom_segment(aes(xend = c(tail(X.13C, n = -1), NA), 
-                   yend = c(tail(X.18O, n = -1), NA)),
-               arrow = arrow(length = unit(0.4, "cm")),
-               color = 4) +
-  geom_point(size = 2, color = 4) +
-  geom_text(aes(label = serial, x = X.13C + 0.3, y = X.18O -0.3))
-
-plot(coord_polar())
-
-#######import data from Yang et al. 2020, Phacochoerus from Mpala, KE###### 
-
-#######import data from Reid et al. 2019, Phacochoerus from Naivasha, KE######
