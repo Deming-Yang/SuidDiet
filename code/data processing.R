@@ -5,7 +5,6 @@ library(EnvStats)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
-library(CircStats)
 library(stats)
 
 ####helper functions, must run before analysis####
@@ -506,6 +505,46 @@ points(P04$X.13C, P04$X.18O,
      pch = 16, col = "black")
 Plot.arrows(P04$X.13C, P04$X.18O, col = P04.18O.plot.col)
 
+#####alternative: positino o differently#####
+#version 1: use diff(P03$X.18O)
+
+ind.P03.dry <- which(diff(P03$X.18O) >= 0)
+
+ind.P03.rain <- which(diff(P03$X.18O) < 0)
+
+col.w.d <- viridis(5)
+
+col.dry <- col.w.d[4]
+
+col.rain <- col.w.d[2]
+
+#initialize vector
+P03.18O.plot.col <- rep(1,length(P03$X.18O))
+P03.18O.plot.col[ind.P03.dry + 1] <- col.dry
+P03.18O.plot.col[ind.P03.rain + 1] <- col.rain
+P03.18O.plot.col
+
+plot(P03$X.13C, P03$X.18O, main = "d13C - d18O corss plot",
+     xlim = c(-14,1),ylim = c(-6,6),
+     pch = 16, col = "black")
+Plot.arrows(P03$X.13C, P03$X.18O, col = P03.18O.plot.col)
+
+#version 1: use diff(P03$X.18O)
+
+ind.P04.dry <- which(diff(P04$X.18O) >= 0)
+
+ind.P04.rain <- which(diff(P04$X.18O) < 0)
+
+#initialize vector
+P04.18O.plot.col <- rep(1,length(P04$X.18O))
+P04.18O.plot.col[ind.P04.dry + 1] <- col.dry
+P04.18O.plot.col[ind.P04.rain + 1] <- col.rain
+P04.18O.plot.col
+
+points(P04$X.13C, P04$X.18O,
+       pch = 16, col = "black")
+Plot.arrows(P04$X.13C, P04$X.18O, col = P04.18O.plot.col)
+
 ###############
 ind.P05.dry <- which(diff(P05$X.18O) > 0)
 
@@ -522,6 +561,47 @@ points(P05$X.13C, P05$X.18O,
 Plot.arrows(P05$X.13C, P05$X.18O, col = P05.18O.plot.col)
 
 
+#####test synpatric individuals####
+#version 1: use diff(P03$X.18O)
+
+ind.P05.dry <- which(diff(P05$X.18O) > 0)
+
+ind.P05.rain <- which(diff(P05$X.18O) <= 0)
+
+col.w.d <- viridis(5)
+
+col.dry <- col.w.d[4]
+
+col.rain <- col.w.d[2]
+
+#initialize vector
+P05.18O.plot.col <- rep(1,length(P05$X.18O))
+P05.18O.plot.col[ind.P05.dry + 1] <- col.dry
+P05.18O.plot.col[ind.P05.rain + 1] <- col.rain
+P05.18O.plot.col
+
+plot(P05$X.13C, P05$X.18O, main = "d13C - d18O corss plot",
+     xlim = c(-14,1),ylim = c(-6,6),
+     pch = 16, col = "black")
+Plot.arrows(P05$X.13C, P05$X.18O, col = P05.18O.plot.col)
+
+#version 1: use diff(P03$X.18O)
+
+ind.P06.dry <- which(diff(P06$X.18O) > 0)
+
+ind.P06.rain <- which(diff(P06$X.18O) <= 0)
+
+#initialize vector
+P06.18O.plot.col <- rep(1,length(P06$X.18O))
+P06.18O.plot.col[ind.P06.dry + 1] <- col.dry
+P06.18O.plot.col[ind.P06.rain + 1] <- col.rain
+P06.18O.plot.col
+
+points(P06$X.13C, P06$X.18O,
+       pch = 16, col = "black")
+Plot.arrows(P06$X.13C, P06$X.18O, col = P06.18O.plot.col)
+
+#########################################################################
 P05 <- extant %>% filter(ID == ID.list[7])
 
 #visualize vectors

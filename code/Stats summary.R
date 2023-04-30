@@ -4,14 +4,15 @@ library(tidyr)
 
 #use customized function to streamline the code
 stats.summ <- function(array){
+  n <- length(array)
   mean <- mean(array)
   sd <- sd(array)
   median <- median(array)
   min <- min(array)
   max <- max(array)
   range <- max(array) - min(array)
-  res <- data.frame(mean, sd, median, min, max, range)
-  colnames(res)<- c("Mean", "sd", "Median","Minimum", "Maximum", "Range")
+  res <- data.frame(n, mean, sd, median, min, max, range)
+  colnames(res)<- c("N","Mean", "sd", "Median","Minimum", "Maximum", "Range")
   print(res, digits=3)
 }
 
