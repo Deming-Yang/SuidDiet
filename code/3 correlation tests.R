@@ -8,9 +8,7 @@ library(ggplot2)
 library(stats)
 
 ####helper functions, must run before analysis####
-
-
-####Fn 2: processing data to account for time lags in isotope profiles####
+####Fn: processing data to account for time lags in isotope profiles####
 t.lag <- function(x.series, y.series, x.lag) {
   #by default, the time lag is applided to x.series
   if(length(x.series) != length(y.series)){
@@ -34,21 +32,55 @@ t.lag <- function(x.series, y.series, x.lag) {
     colnames(df) <- c("X.13C","X.18O")
     return(df)
   }
-
+  
 }
 
+###################potamochoerus canines#################
+P01.cor.k <- cor.test(P01$X.13C.corr, P01$X.18O, method = "kendall")
+P01.cor.s <- cor.test(P01$X.13C.corr, P01$X.18O, method = "spearman")
+P01.cor.k #NS
+P01.cor.s #NS
 
-setwd("C:/Users/ydmag/Google Drive/Dissertation data/Extant suid seasonal diet/SuidDiet")
+P01.lag <- t.lag(P01$X.13C.corr, P01$X.18O, -2)#shifting x back 2 positions
 
-extant <- read.csv("data/suid_d13C_d18O.csv") #data from this study
+P01.lag.cor.k <- cor.test(P01.lag$X.13C.corr, P01.lag$X.18O, method = "kendall")
+P01.lag.cor.s <- cor.test(P01.lag$X.13C.corr, P01.lag$X.18O, method = "spearman")
 
-ID.list <- levels(factor(extant$ID))
-print(ID.list)
+P01.lag.cor.k #NS
+P01.lag.cor.s #NS
 
-# [1] "NKU245" "NKU257" "NKU265" "P01"    "P03"    "P04"    "P05"    "P06"    "P07"    "SAM01"  "SAM02" 
-# [12] "SAM03"  "SBL01"  "SBL02"  "SBL03"
 
-NKU245 <- extant %>% filter(ID == ID.list[1])
+
+P03.cor.k <- cor.test(P03$X.13C.corr, P03$X.18O, method = "kendall")
+P03.cor.s <- cor.test(P03$X.13C.corr, P03$X.18O, method = "spearman")
+P03.cor.k #NS
+P03.cor.s #NS
+
+P03.lag <- t.lag(P03$X.13C.corr, P03$X.18O, -2)#shifting x back 2 positions
+
+P03.lag.cor.k <- cor.test(P03.lag$X.13C.corr, P03.lag$X.18O, method = "kendall")
+P03.lag.cor.s <- cor.test(P03.lag$X.13C.corr, P03.lag$X.18O, method = "spearman")
+
+P03.lag.cor.k # Significant ***
+P03.lag.cor.s # Significant ***
+
+
+
+P05.cor.k <- cor.test(P05$X.13C.corr, P05$X.18O, method = "kendall")
+P05.cor.s <- cor.test(P05$X.13C.corr, P05$X.18O, method = "spearman")
+P05.cor.k #NS
+P05.cor.s #NS
+
+P05.lag <- t.lag(P05$X.13C.corr, P05$X.18O, -2)#shifting x back 2 positions
+
+P05.lag.cor.k <- cor.test(P05.lag$X.13C.corr, P05.lag$X.18O, method = "kendall")
+P05.lag.cor.s <- cor.test(P05.lag$X.13C.corr, P05.lag$X.18O, method = "spearman")
+
+P05.lag.cor.k # NS
+P05.lag.cor.s # NS
+
+###################Phacochoerus molars#################
+
 
 NKU245.cor.k <- cor.test(NKU245$X.13C, NKU245$X.18O, method = "kendall")
 NKU245.cor.s <- cor.test(NKU245$X.13C, NKU245$X.18O, method = "spearman")
@@ -63,7 +95,7 @@ NKU245.lag.cor.s <- cor.test(NKU245.lag$X.13C, NKU245.lag$X.18O, method = "spear
 NKU245.lag.cor.k #NS
 NKU245.lag.cor.s #NS
 
-NKU257 <- extant %>% filter(ID == ID.list[2])
+
 
 NKU257.cor.k <- cor.test(NKU257$X.13C, NKU257$X.18O, method = "kendall")
 NKU257.cor.s <- cor.test(NKU257$X.13C, NKU257$X.18O, method = "spearman")
@@ -78,7 +110,7 @@ NKU257.lag.cor.s <- cor.test(NKU257.lag$X.13C, NKU257.lag$X.18O, method = "spear
 NKU257.lag.cor.k #NS
 NKU257.lag.cor.s #NS
 
-NKU265 <- extant %>% filter(ID == ID.list[3])
+
 
 NKU265.cor.k <- cor.test(NKU265$X.13C, NKU265$X.18O, method = "kendall")
 NKU265.cor.s <- cor.test(NKU265$X.13C, NKU265$X.18O, method = "spearman")
@@ -93,37 +125,9 @@ NKU265.lag.cor.s <- cor.test(NKU265.lag$X.13C, NKU265.lag$X.18O, method = "spear
 NKU265.lag.cor.k #NS, but close
 NKU265.lag.cor.s #NS, but close
 
-P01 <- extant %>% filter(ID == ID.list[4])
 
-P01.cor.k <- cor.test(P01$X.13C, P01$X.18O, method = "kendall")
-P01.cor.s <- cor.test(P01$X.13C, P01$X.18O, method = "spearman")
-P01.cor.k #NS
-P01.cor.s #NS
 
-P01.lag <- t.lag(P01$X.13C, P01$X.18O, -2)#shifting x back 2 positions
 
-P01.lag.cor.k <- cor.test(P01.lag$X.13C, P01.lag$X.18O, method = "kendall")
-P01.lag.cor.s <- cor.test(P01.lag$X.13C, P01.lag$X.18O, method = "spearman")
-
-P01.lag.cor.k #NS
-P01.lag.cor.s #NS
-
-P03 <- extant %>% filter(ID == ID.list[5])
-
-P03.cor.k <- cor.test(P03$X.13C, P03$X.18O, method = "kendall")
-P03.cor.s <- cor.test(P03$X.13C, P03$X.18O, method = "spearman")
-P03.cor.k #NS
-P03.cor.s #NS
-
-P03.lag <- t.lag(P03$X.13C, P03$X.18O, -2)#shifting x back 2 positions
-
-P03.lag.cor.k <- cor.test(P03.lag$X.13C, P03.lag$X.18O, method = "kendall")
-P03.lag.cor.s <- cor.test(P03.lag$X.13C, P03.lag$X.18O, method = "spearman")
-
-P03.lag.cor.k # Significant ***
-P03.lag.cor.s # Significant ***
-
-P04 <- extant %>% filter(ID == ID.list[6])
 
 P04.cor.k <- cor.test(P04$X.13C, P04$X.18O, method = "kendall")
 P04.cor.s <- cor.test(P04$X.13C, P04$X.18O, method = "spearman")
@@ -137,23 +141,8 @@ P04.lag.cor.s <- cor.test(P04.lag$X.13C, P04.lag$X.18O, method = "spearman")
 
 P04.lag.cor.k # Significant **
 P04.lag.cor.s # Significant **
- 
-P05 <- extant %>% filter(ID == ID.list[7])
 
-P05.cor.k <- cor.test(P05$X.13C, P05$X.18O, method = "kendall")
-P05.cor.s <- cor.test(P05$X.13C, P05$X.18O, method = "spearman")
-P05.cor.k #NS
-P05.cor.s #NS
 
-P05.lag <- t.lag(P05$X.13C, P05$X.18O, -2)#shifting x back 2 positions
-
-P05.lag.cor.k <- cor.test(P05.lag$X.13C, P05.lag$X.18O, method = "kendall")
-P05.lag.cor.s <- cor.test(P05.lag$X.13C, P05.lag$X.18O, method = "spearman")
-
-P05.lag.cor.k # NS
-P05.lag.cor.s # NS
-
-P06 <- extant %>% filter(ID == ID.list[8])
 
 P06.cor.k <- cor.test(P06$X.13C, P06$X.18O, method = "kendall")
 P06.cor.s <- cor.test(P06$X.13C, P06$X.18O, method = "spearman")
@@ -183,7 +172,7 @@ P07.lag.cor.s <- cor.test(P07.lag$X.13C, P07.lag$X.18O, method = "spearman")
 P07.lag.cor.k # NS
 P07.lag.cor.s # NS
 
-SAM01 <- extant %>% filter(ID == ID.list[10])
+
 
 SAM01.cor.k <- cor.test(SAM01$X.13C, SAM01$X.18O, method = "kendall")
 SAM01.cor.s <- cor.test(SAM01$X.13C, SAM01$X.18O, method = "spearman")
@@ -198,7 +187,7 @@ SAM01.lag.cor.s <- cor.test(SAM01.lag$X.13C, SAM01.lag$X.18O, method = "spearman
 SAM01.lag.cor.k # NS
 SAM01.lag.cor.s # NS
 
-SAM02 <- extant %>% filter(ID == ID.list[11])
+
 
 SAM02.cor.k <- cor.test(SAM02$X.13C, SAM02$X.18O, method = "kendall")
 SAM02.cor.s <- cor.test(SAM02$X.13C, SAM02$X.18O, method = "spearman")
@@ -213,7 +202,7 @@ SAM02.lag.cor.s <- cor.test(SAM02.lag$X.13C, SAM02.lag$X.18O, method = "spearman
 SAM02.lag.cor.k # NS
 SAM02.lag.cor.s # NS
 
-SAM03 <- extant %>% filter(ID == ID.list[12])
+
 
 SAM03.cor.k <- cor.test(SAM03$X.13C, SAM03$X.18O, method = "kendall")
 SAM03.cor.s <- cor.test(SAM03$X.13C, SAM03$X.18O, method = "spearman")
@@ -228,7 +217,7 @@ SAM03.lag.cor.s <- cor.test(SAM03.lag$X.13C, SAM03.lag$X.18O, method = "spearman
 SAM03.lag.cor.k # Significant *
 SAM03.lag.cor.s # Significant *
 
-SBL01 <- extant %>% filter(ID == ID.list[13])
+
 
 SBL01.cor.k <- cor.test(SBL01$X.13C, SBL01$X.18O, method = "kendall")
 SBL01.cor.s <- cor.test(SBL01$X.13C, SBL01$X.18O, method = "spearman")
@@ -243,7 +232,7 @@ SBL01.lag.cor.s <- cor.test(SBL01.lag$X.13C, SBL01.lag$X.18O, method = "spearman
 SBL01.lag.cor.k # Significant *
 SBL01.lag.cor.s # Significant *
 
-SBL02 <- extant %>% filter(ID == ID.list[14])
+
 
 SBL02.cor.k <- cor.test(SBL02$X.13C, SBL02$X.18O, method = "kendall")
 SBL02.cor.s <- cor.test(SBL02$X.13C, SBL02$X.18O, method = "spearman")
@@ -258,7 +247,7 @@ SBL02.lag.cor.s <- cor.test(SBL02.lag$X.13C, SBL02.lag$X.18O, method = "spearman
 SBL02.lag.cor.k # Significant *
 SBL02.lag.cor.s # Significant *
 
-SBL03 <- extant %>% filter(ID == ID.list[15])
+
 
 SBL03.cor.k <- cor.test(SBL03$X.13C, SBL03$X.18O, method = "kendall")
 SBL03.cor.s <- cor.test(SBL03$X.13C, SBL03$X.18O, method = "spearman")
@@ -423,192 +412,3 @@ B58.2.lag.cor.s <- cor.test(B58.2.lag$X.13C, B58.2.lag$X.18O, method = "spearman
 
 B58.2.lag.cor.k # NS
 B58.2.lag.cor.s # NS
-
-
-#####simple plot function######
-#in a combined plot, use regular plot function
-plot(P03$X.13C, P03$X.18O, main = "d13C - d18O corss plot",
-     xlim = c(-12,1),ylim = c(-3,6),
-     pch = 16, col = "blue")
-Plot.arrows(P03$X.13C, P03$X.18O, col = "blue")
-points(P04$X.13C, P04$X.18O,
-     pch = 16, col = "red")
-Plot.arrows(P04$X.13C, P04$X.18O, col = "red")
-
-#####advanced plot function######
-#arbitrarilly define seasons using d18O data
-#version 1: use diff(P03$X.18O)
-
-
-
-ind.P03.dry <- which(diff(P03$X.18O) > 0)
-
-ind.P03.rain <- which(diff(P03$X.18O) <= 0)
-
-#determine color bins
-bin.wd <- 0.3
-
-col.bins.P03.18O <- ceiling((max(diff(P03$X.18O))-min(diff(P03$X.18O)))/bin.wd) + 1
-
-col.P03.18O <- viridis(col.bins.P03.18O)
-
-P03.18O.plot.col <- c(1,col.P03.18O[ceiling((diff(P03$X.18O) + abs(min(diff(P03$X.18O))))/bin.wd) + 1])
-
-plot(P03$X.13C, P03$X.18O, main = "d13C - d18O corss plot",
-     xlim = c(-12,1),ylim = c(-3,6),
-     pch = 16, col = "black")
-Plot.arrows(P03$X.13C, P03$X.18O, col = P03.18O.plot.col)
-
-#version 1: use diff(P03$X.18O)
-
-
-
-plot(P03$X.13C, P03$X.18O, main = "d13C - d18O corss plot",
-     xlim = c(-14,1),ylim = c(-6,6),
-     pch = 16, col = "black")
-Plot.arrows(P03$X.13C, P03$X.18O, col = P03.18O.plot.col)
-
-#version 1: use diff(P03$X.18O)
-
-ind.P04.dry <- which(diff(P04$X.18O) > 0)
-
-ind.P04.rain <- which(diff(P04$X.18O) <= 0)
-
-#initialize vector
-P04.18O.plot.col <- rep(1,length(P04$X.18O))
-P04.18O.plot.col[ind.P04.dry + 1] <- col.dry
-P04.18O.plot.col[ind.P04.rain + 1] <- col.rain
-P04.18O.plot.col
-
-points(P04$X.13C, P04$X.18O,
-     pch = 16, col = "black")
-Plot.arrows(P04$X.13C, P04$X.18O, col = P04.18O.plot.col)
-
-#####alternative: positino o differently#####
-#version 1: use diff(P03$X.18O)
-
-ind.P03.dry <- which(diff(P03$X.18O) >= 0)
-
-ind.P03.rain <- which(diff(P03$X.18O) < 0)
-
-col.w.d <- viridis(6)
-
-col.dry <- col.w.d[5]
-
-col.rain <- col.w.d[3]
-
-#initialize vector
-P03.18O.plot.col <- rep(1,length(P03$X.18O))
-P03.18O.plot.col[ind.P03.dry + 1] <- col.dry
-P03.18O.plot.col[ind.P03.rain + 1] <- col.rain
-P03.18O.plot.col
-
-
-
-
-
-#version 1: use diff(P03$X.18O)
-
-ind.P04.dry <- which(diff(P04$X.18O) >= 0)
-
-ind.P04.rain <- which(diff(P04$X.18O) < 0)
-
-#initialize vector
-P04.18O.plot.col <- rep(1,length(P04$X.18O))
-P04.18O.plot.col[ind.P04.dry + 1] <- col.dry
-P04.18O.plot.col[ind.P04.rain + 1] <- col.rain
-P04.18O.plot.col
-
-points(P04$X.13C, P04$X.18O,
-       pch = 16, col = "black")
-Plot.arrows(P04$X.13C, P04$X.18O, col = P04.18O.plot.col)
-
-###############
-ind.P05.dry <- which(diff(P05$X.18O) > 0)
-
-ind.P05.rain <- which(diff(P05$X.18O) <= 0)
-
-#initialize vector
-P05.18O.plot.col <- rep(1,length(P05$X.18O))
-P05.18O.plot.col[ind.P05.dry + 1] <- col.dry
-P05.18O.plot.col[ind.P05.rain + 1] <- col.rain
-P05.18O.plot.col
-
-points(P05$X.13C, P05$X.18O,
-       pch = 16, col = "black")
-Plot.arrows(P05$X.13C, P05$X.18O, col = P05.18O.plot.col)
-
-
-#####test synpatric individuals####
-#version 1: use diff(P03$X.18O)
-
-ind.P05.dry <- which(diff(P05$X.18O) > 0)
-
-ind.P05.rain <- which(diff(P05$X.18O) <= 0)
-
-col.w.d <- viridis(5)
-
-col.dry <- col.w.d[4]
-
-col.rain <- col.w.d[2]
-
-#initialize vector
-P05.18O.plot.col <- rep(1,length(P05$X.18O))
-P05.18O.plot.col[ind.P05.dry + 1] <- col.dry
-P05.18O.plot.col[ind.P05.rain + 1] <- col.rain
-P05.18O.plot.col
-
-plot(P05$X.13C, P05$X.18O, main = "d13C - d18O corss plot",
-     xlim = c(-14,1),ylim = c(-6,6),
-     pch = 16, col = "black")
-Plot.arrows(P05$X.13C, P05$X.18O, col = P05.18O.plot.col)
-
-#version 1: use diff(P03$X.18O)
-
-ind.P06.dry <- which(diff(P06$X.18O) > 0)
-
-ind.P06.rain <- which(diff(P06$X.18O) <= 0)
-
-#initialize vector
-P06.18O.plot.col <- rep(1,length(P06$X.18O))
-P06.18O.plot.col[ind.P06.dry + 1] <- col.dry
-P06.18O.plot.col[ind.P06.rain + 1] <- col.rain
-P06.18O.plot.col
-
-points(P06$X.13C, P06$X.18O,
-       pch = 16, col = "black")
-Plot.arrows(P06$X.13C, P06$X.18O, col = P06.18O.plot.col)
-
-#########################################################################
-#tests#
-P05 <- extant %>% filter(ID == ID.list[7])
-
-#visualize vectors
-ggplot(P05, aes(x = X.13C, y = X.18O)) +
-  geom_segment(aes(xend = c(tail(X.13C, n = -1), NA), 
-                   yend = c(tail(X.18O, n = -1), NA)),
-               arrow = arrow(length = unit(0.4, "cm")),
-               color = 4) +
-  geom_point(size = 2, color = 4) +
-  geom_text(aes(label = serial, x = X.13C + 0.3, y = X.18O -0.3))
-
-#visualize vectors
-ggplot(P04, aes(x = X.13C, y = X.18O)) +
-  geom_segment(aes(xend = c(tail(X.13C, n = -1), NA), 
-                   yend = c(tail(X.18O, n = -1), NA)),
-               arrow = arrow(length = unit(0.4, "cm")),
-               color = 4) +
-  geom_point(size = 2, color = 4) +
-  geom_text(aes(label = serial, x = X.13C + 0.3, y = X.18O -0.3))
-
-
-atan2(diff(P03$X.18O,1), diff(P03$X.13C,1))
-
-#calculate slopes of vectors
-P03.vtr.ang <- atan2(diff(P03$X.18O,1), diff(P03$X.13C,1)) #convert to 0 to 360 degrees
-
-rose.diag(P03.vtr.ang,bins=12)
-
-hist.P03.vtr <- hist(P03.vtr.ang,breaks=seq(-180,180,30))
-plot.P03.vtr <- data.frame(hist.P03.vtr$mids,hist.P03.vtr$density)
-colnames(plot.P03.vtr) <- c("mid","density")

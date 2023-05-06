@@ -17,19 +17,21 @@ stats.summ <- function(array){
 }
 
 ########stats summary of d13C#######
+###################potamochoerus canines#################
+stats.summ(P01$X.13C.corr)
+
+stats.summ(P03$X.13C.corr)
+
+stats.summ(P05$X.13C.corr)
+
+###################Phacochoerus molars#################
 stats.summ(NKU245$X.13C)
 
 stats.summ(NKU257$X.13C)
 
 stats.summ(NKU265$X.13C)
 
-stats.summ(P01$X.13C)
-
-stats.summ(P03$X.13C)
-
 stats.summ(P04$X.13C)
-
-stats.summ(P05$X.13C)
 
 stats.summ(P06$X.13C)
 
@@ -48,19 +50,20 @@ stats.summ(SBL02$X.13C)
 stats.summ(SBL03$X.13C)
 
 ########stats summary of d18O#######
+
+stats.summ(P01$X.18O)
+
+stats.summ(P03$X.18O)
+
+stats.summ(P05$X.18O)
+
 stats.summ(NKU245$X.18O)
 
 stats.summ(NKU257$X.18O)
 
 stats.summ(NKU265$X.18O)
 
-stats.summ(P01$X.18O)
-
-stats.summ(P03$X.18O)
-
 stats.summ(P04$X.18O)
-
-stats.summ(P05$X.18O)
 
 stats.summ(P06$X.18O)
 
