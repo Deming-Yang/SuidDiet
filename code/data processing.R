@@ -9,16 +9,6 @@ library(stats)
 
 ####helper functions, must run before analysis####
 
-####Fn 1: plotting arrows####
-Plot.arrows <- function(x.corr, y.corr, col) {
-  if(length(x.corr) != length(y.corr)){
-    warning("Error! x and y lengths differ")
-  }else{
-    for(i in 2:length(x.corr)){
-      arrows(x.corr[i-1], y.corr[i-1], x.corr[i], y.corr[i],angle=30, length = 0.15, col = col[i])
-    }
-  }
-}
 
 ####Fn 2: processing data to account for time lags in isotope profiles####
 t.lag <- function(x.series, y.series, x.lag) {
@@ -448,6 +438,9 @@ Plot.arrows(P04$X.13C, P04$X.18O, col = "red")
 #####advanced plot function######
 #arbitrarilly define seasons using d18O data
 #version 1: use diff(P03$X.18O)
+
+
+
 ind.P03.dry <- which(diff(P03$X.18O) > 0)
 
 ind.P03.rain <- which(diff(P03$X.18O) <= 0)
@@ -468,21 +461,7 @@ Plot.arrows(P03$X.13C, P03$X.18O, col = P03.18O.plot.col)
 
 #version 1: use diff(P03$X.18O)
 
-ind.P03.dry <- which(diff(P03$X.18O) > 0)
 
-ind.P03.rain <- which(diff(P03$X.18O) <= 0)
-
-col.w.d <- viridis(5)
-
-col.dry <- col.w.d[4]
-
-col.rain <- col.w.d[2]
-
-#initialize vector
-P03.18O.plot.col <- rep(1,length(P03$X.18O))
-P03.18O.plot.col[ind.P03.dry + 1] <- col.dry
-P03.18O.plot.col[ind.P03.rain + 1] <- col.rain
-P03.18O.plot.col
 
 plot(P03$X.13C, P03$X.18O, main = "d13C - d18O corss plot",
      xlim = c(-14,1),ylim = c(-6,6),
@@ -512,11 +491,11 @@ ind.P03.dry <- which(diff(P03$X.18O) >= 0)
 
 ind.P03.rain <- which(diff(P03$X.18O) < 0)
 
-col.w.d <- viridis(5)
+col.w.d <- viridis(6)
 
-col.dry <- col.w.d[4]
+col.dry <- col.w.d[5]
 
-col.rain <- col.w.d[2]
+col.rain <- col.w.d[3]
 
 #initialize vector
 P03.18O.plot.col <- rep(1,length(P03$X.18O))
@@ -524,10 +503,9 @@ P03.18O.plot.col[ind.P03.dry + 1] <- col.dry
 P03.18O.plot.col[ind.P03.rain + 1] <- col.rain
 P03.18O.plot.col
 
-plot(P03$X.13C, P03$X.18O, main = "d13C - d18O corss plot",
-     xlim = c(-14,1),ylim = c(-6,6),
-     pch = 16, col = "black")
-Plot.arrows(P03$X.13C, P03$X.18O, col = P03.18O.plot.col)
+
+
+
 
 #version 1: use diff(P03$X.18O)
 
@@ -602,6 +580,7 @@ points(P06$X.13C, P06$X.18O,
 Plot.arrows(P06$X.13C, P06$X.18O, col = P06.18O.plot.col)
 
 #########################################################################
+#tests#
 P05 <- extant %>% filter(ID == ID.list[7])
 
 #visualize vectors
