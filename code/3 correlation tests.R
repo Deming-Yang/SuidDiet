@@ -1,10 +1,7 @@
 library(scales)
-library(MASS)
 library(viridisLite)
-library(EnvStats)
 library(dplyr)
 library(tidyr)
-library(ggplot2)
 library(stats)
 
 ####helper functions, must run before analysis####
