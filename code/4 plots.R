@@ -2,13 +2,17 @@ library(scales)
 library(viridisLite)
 
 ####Fn 1: plotting arrows####
-Plot.arrows <- function(x.corr, y.corr, col) {
+Plot.arrows <- function(x.corr, y.corr, col, tr = NA) {
+  require(scales)
   if(length(x.corr) != length(y.corr)){
     warning("Error! x and y lengths differ")
-  }else{
-    for(i in 2:length(x.corr)){
-      arrows(x.corr[i-1], y.corr[i-1], x.corr[i], y.corr[i],angle=30, length = 0.15, col = col[i])
-    }
+    break
+  }else if(is.na(tr)){
+    tr <- 0.5 #default transparancy
+  }
+  for(i in 2:length(x.corr)){
+    arrows(x.corr[i-1], y.corr[i-1], x.corr[i], y.corr[i],lwd=3,
+           angle=30, length = 0.15, col = alpha(col[i], tr))
   }
 }
 
@@ -41,38 +45,39 @@ O.plot.col <- function(data) {
 ###############set 1: DR Congo ###############
 
 #P01 Potamochoerus
-plot(P01$X.13C, P01$X.18O, main = "d13C - d18O corss plot",
-     xlim = c(-14,2),ylim = c(-5,7),
-     pch = 16, col = "black")
-Plot.arrows(P01$X.13C, P01$X.18O, col = O.plot.col(P01$X.18O))
+plot(P01$X.13C.corr, P01$X.18O, main = "d13C - d18O corss plot: ",
+     xlim = c(-16,2),ylim = c(-5,7), xlab="d13C", ylab="d18O",
+     pch = 15, col = "black")
+Plot.arrows(P01$X.13C.corr, P01$X.18O, col = O.plot.col(P01$X.18O))
 
 #P04 Phacochoerus
 points(P04$X.13C, P04$X.18O,
-     pch = 16, col = "black")
+     pch = 17, col = "black")
 Plot.arrows(P04$X.13C, P04$X.18O, col = O.plot.col(P04$X.18O))
+legend(-16,6,c("Potamochoerus","Phacochoerus"),pch=c(15,17))
 
 ###############set 2: Kenya ###############
 
 #P05 Potamochoerus
-plot(P05$X.13C, P05$X.18O, main = "d13C - d18O corss plot",
-     xlim = c(-13,2),ylim = c(-5,7),
-     pch = 16, col = "black")
-Plot.arrows(P05$X.13C, P05$X.18O, col = O.plot.col(P05$X.18O))
+plot(P05$X.13C.corr, P05$X.18O, main = "d13C - d18O corss plot",
+     xlim = c(-16,2),ylim = c(-5,7), xlab="d13C", ylab="d18O",
+     pch = 15, col = "black")
+Plot.arrows(P05$X.13C.corr, P05$X.18O, col = O.plot.col(P05$X.18O))
 
 #P06 Phacochoerus
 points(P06$X.13C, P06$X.18O,
-       pch = 16, col = "black")
+       pch = 17, col = "black")
 Plot.arrows(P06$X.13C, P06$X.18O, col = O.plot.col(P06$X.18O))
 
 ###############set 3: Malawi/Mozambique ###############
 
 #P03 Potamochoerus
-plot(P03$X.13C, P03$X.18O, main = "d13C - d18O corss plot",
-     xlim = c(-13,2),ylim = c(-5,7),
-     pch = 16, col = "black")
-Plot.arrows(P03$X.13C, P03$X.18O, col = O.plot.col(P03$X.18O))
+plot(P03$X.13C.corr, P03$X.18O, main = "d13C - d18O corss plot",
+     xlim = c(-16,2),ylim = c(-5,7), xlab="d13C", ylab="d18O",
+     pch = 15, col = "black")
+Plot.arrows(P03$X.13C.corr, P03$X.18O, col = O.plot.col(P03$X.18O))
 
 #P07 Phacochoerus
 points(P07$X.13C, P07$X.18O,
-       pch = 16, col = "black")
+       pch = 17, col = "black")
 Plot.arrows(P07$X.13C, P07$X.18O, col = O.plot.col(P07$X.18O))
