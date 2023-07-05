@@ -36,3 +36,26 @@ P01 <- P01 %>% mutate( X.13C.corr = X.13C - 2)
 P03 <- P03 %>% mutate( X.13C.corr = X.13C - 2)
 
 P05 <- P05 %>% mutate( X.13C.corr = X.13C - 2)
+
+################ calculate end member dietary values ################
+
+#Cerling and Harris 1999
+
+d.C4 <- -12.8
+
+d.C3 <- -27.4 
+
+epsilon <- 13.3 #Passy 2005, diet to molar enamel fractionation in domestic pigs
+
+#nominal pure C4 diet, linear mixing
+Enamel.C4 <- ((1 + d.C4/1e3)*(1 + epsilon/1e3) - 1) * 1e3 #0.3 per mill
+
+#nominal pure C3 diet, linear mixing
+Enamel.C3 <- ((1 + d.C3/1e3)*(1 + epsilon/1e3) - 1) * 1e3 #-14.5 per mill
+
+#mixed diets, linear mixing
+Enamel.75C4 <- ((1 + d.C4/1e3 * 0.75 + d.C3/1e3 * 0.25)*(1 + epsilon/1e3) - 1) * 1e3 #-3.4 per mill
+
+Enamel.50C4 <- ((1 + d.C4/1e3 * 0.5 + d.C3/1e3 * 0.5)*(1 + epsilon/1e3) - 1) * 1e3 #-7.1 per mill
+
+Enamel.25C4 <- ((1 + d.C4/1e3 * 0.25 + d.C3/1e3 * 0.75)*(1 + epsilon/1e3) - 1) * 1e3 #-10.8 per mill

@@ -11,8 +11,9 @@ stats.summ <- function(array){
   min <- min(array)
   max <- max(array)
   range <- max(array) - min(array)
-  res <- data.frame(n, mean, sd, median, min, max, range)
-  colnames(res)<- c("N","Mean", "sd", "Median","Minimum", "Maximum", "Range")
+  iqRange <- IQR(array)
+  res <- data.frame(n, mean, sd, median, min, max, range, iqRange)
+  colnames(res)<- c("N","Mean", "sd", "Median","Minimum", "Maximum", "Range", "IQR")
   print(res, digits=3)
 }
 

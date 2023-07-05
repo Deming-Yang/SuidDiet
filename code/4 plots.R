@@ -41,7 +41,7 @@ O.plot.col <- function(data) {
 }
 
 
-###############plotting sympatric datasets###############
+###############plotting quasi-sympatric datasets###############
 ###############set 1: DR Congo ###############
 
 #P01 Potamochoerus
