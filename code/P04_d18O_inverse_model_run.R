@@ -16,7 +16,7 @@ library("beepr")
 
 # load inverse model functions
 
-source("code/ADM_inverse_functions.R")
+source("code/Inverse_functions.R")
 
 # specify a project name for printing on  model reports
 
