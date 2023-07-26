@@ -40,6 +40,22 @@ O.plot.col <- function(data) {
   
 }
 
+#Fn 3
+# Adds time series to plot w 2 prob density envelopes
+tsdens = function(d, base = "black"){
+  require(scales)
+  #Check dimensions of d
+  if(ncol(d) != 4){stop("d cols should be should be time, 2.5%, 50%, 97.5% CI")}
+  
+  base.rgb = col2rgb(base)
+  cols = c(rgb(base.rgb[1]/255, base.rgb[2]/255, base.rgb[3]/255, alpha = 0.25), 
+           rgb(base.rgb[1]/255, base.rgb[2]/255, base.rgb[3]/255, alpha = 1))
+  
+  polygon(c(d[, 1], rev(d[, 1])), c(d[, 2], rev(d[, 4])), 
+          col = cols[1], border = NA) #95% CI
+  lines(d[, 1], d[, 3], col = cols[3], lwd = 2)
+}
+
 
 ###############plotting quasi-sympatric datasets###############
 ###############set 1: DR Congo ###############
