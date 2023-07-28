@@ -352,6 +352,6 @@ mSolv_fun <- function(nsolxns, numsam, finit, la, lm, openindx, avelength, maxle
   
   solvout <<- as.data.frame(solvout)
   
-  return(solvout)
+  # return(solvout)
   
 }

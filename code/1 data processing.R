@@ -37,13 +37,13 @@ P03 <- P03 %>% mutate( X.13C.corr = X.13C - 2)
 
 P05 <- P05 %>% mutate( X.13C.corr = X.13C - 2)
 
-################ calculate end member dietary values ################
+################ calculate end member dietary values after correction for the suess effect################
 
-#Cerling and Harris 1999
+#Cerling et al 2015
 
-d.C4 <- -11.7
+d.C4 <- -10
 
-d.C3 <- -27.4 
+d.C3 <- -26.6 
 
 epsilon <- 13.3 #Passy 2005, diet to molar enamel fractionation in domestic pigs
 

@@ -61,9 +61,9 @@ r3 <- 2 #0.2 mm
 la <- 65 #molar: Yang et al., 2020: la = 65, lm = 35
 
 ## run the Emeas function to generate Emeas estimates
-set.seed(3456)
-Emeasout <- Emeasfun(numtrials = numtrials, numsam = length(tooth.data$X.18O), length = tooth.data$Passey.length, 
-         dMeas = round(tooth.data$X.18O, 1), r1 = r1, r2 = r2, r3 = r3, la = la)
+set.seed(3456) 
+Emeasout <- Emeasfun(numtrials = numtrials, numsam = length(tooth.data$X.13C), length = tooth.data$Passey.length, 
+                     dMeas = round(tooth.data$X.13C, 1), r1 = r1, r2 = r2, r3 = r3, la = la)
 
 #check individual trials using the first index in the 3-d array
 Emeasout[[1]][1,,]
@@ -73,12 +73,12 @@ Emeasout[[1]][1,,]
 # values of Emeas/Edist should be close to DPE values from mSolv code
 # adjust df stepwise to match Emeas/Edist to DPE
 
-Edist.P04.18O <- Emeasout[[2]] #record Edist
+Edist.P04.13C <- Emeasout[[2]] #record Edist
 
 #visualization
 plot(density(Edist.P04.18O))
-mean.edist.P04.18O <- mean(Edist.P04.18O)
-mean.edist.P04.18O
+mean.edist.P04.13C <- mean(Edist.P04.13C)
+mean.edist.P04.13C
 
 Emeas.params <- list(numtrials = numtrials, r1 = r1, r2 = r2, r3 = r3, la = la)
 
@@ -100,7 +100,7 @@ Emeas.params <- list(numtrials = numtrials, r1 = r1, r2 = r2, r3 = r3, la = la)
 #### input paramaters ####
 
 nsolxns <- 200 # number of solutions to be computed
-dMeas <- round(tooth.data$X.18O, 1) # isotope data input
+dMeas <- round(tooth.data$X.13C, 1) # isotope data input
 numsam <- length(dMeas) # number of samples
 openindx <- 1 # degree of openendedness, less than lm, openended (profile mature) --> index = 1; 
 # close ended (enamel immature) index = lm
@@ -123,13 +123,13 @@ minlength = 16
 # min depth of the reference vector
 mindepth = 5
 # maximum value of the reference vector
-maxratio = 6.2
+maxratio = 0.6
 # minimum value of the reference vector
-minratio = 1.7
+minratio = -4.9
 # sd for random draws that produce reference vector
 stdev = 1
 # damping factor
-df = 0.01
+df = 0.005
 
 #round to nearest higher integer
 numbefore=ceiling(la/avelength)
@@ -145,7 +145,7 @@ S = matrix(0, nrow = numsam, ncol = nsolxns)
 # df - damping factor. Needs to be chosen to minimize difference between the estimated measurement error
 # (E~meas~) and the prediction error (E~pred~)
 
-set.seed(3456)
+set.seed(3456) 
 # write parameter input into a list for printing the model report
 mSolvparams <- list(nsolxns = nsolxns, openindx = openindx, lm = lm, la = la, finit = finit, maxlength = maxlength, minlength = minlength, 
                     mindepth = mindepth,r1 = r1, r2 = r2, r3 = r3, maxratio = maxratio, minratio = minratio, stdev = stdev, df = df)
@@ -157,14 +157,14 @@ mSolvparams <- list(nsolxns = nsolxns, openindx = openindx, lm = lm, la = la, fi
 # everything needs to be selected from tic() until beep() and executed together
 tic()
 solvout <- mSolv_fun(nsolxns = nsolxns, numsam = numsam, finit = finit, la = la, lm = lm, openindx = 1, avelength = avelength, 
-                    maxlength = maxlength, minlength = minlength, mindepth = mindepth, length = tooth.data$Passey.length,
-                    dMeas = dMeas, r1 = r1, r2 = r2, r3 = r3, maxratio = maxratio, minratio = minratio, 
-                    stdev = stdev, df = df, depth = depth)
+                     maxlength = maxlength, minlength = minlength, mindepth = mindepth, length = tooth.data$Passey.length,
+                     dMeas = dMeas, r1 = r1, r2 = r2, r3 = r3, maxratio = maxratio, minratio = minratio, 
+                     stdev = stdev, df = df, depth = depth)
 toc()
 beep(sound = 2)
 
 plot(density(DPE), col = "blue")
-lines(density(Edist.P04.18O),col = "red")
+lines(density(Edist.P04.13C),col = "red")
 
 # # plot some example solutions of mSolv
 # 
@@ -182,7 +182,7 @@ lines(density(Edist.P04.18O),col = "red")
 #   geom_line(aes(x = totallength, y = trial8), colour = "lightblue")+
 #   geom_line(aes(x = totallength, y = trial9), colour = "lightblue")+
 #   geom_line(aes(x = totallength, y = trial10), colour = "lightblue")
-  
+
 
 #### evaluate DPE (= Epred, prediction error) vs Edist (= Emeas, estimated measurement error) ####
 
@@ -211,7 +211,8 @@ lines(density(Edist.P04.18O),col = "red")
 
 # extract only trial output
 
-tdata <- solvout %>%  select(-callength)
+tdata <- solvout %>%
+  select(-callength)
 
 # transpose
 tdatatrans <- t(tdata)
@@ -240,13 +241,13 @@ tdataci.d$ci.length <- tdataci.d$ci.length/10
 # combine all output
 all.out <- cbind(solvout, tdataci.d)
 
-P04.all.out.18O <- all.out
+P04.all.out.13C <- all.out
 
 ######### plot out 95% CI #####
-plot(P04.all.out.18O$ci.length, P04.all.out.18O$mean, type = "l", lwd = 2, ylim = c(-1,8))
+plot(P04.all.out.13C$ci.length, P04.all.out.13C$mean, type = "l", lwd = 2, ylim = c(-8,3))
 tsdens(tdataci.d) # add 95% CI as gray shading
-points(max(P04$dist)-P04$dist, P04$X.18O, col = "cyan4", pch = 16, cex = 1.5) #measurements
-lines(max(P04$dist)-P04$dist, P04$X.18O, col = "cyan4", lwd = 2, lty = 2)
+points(max(P04$dist)-P04$dist, P04$X.13C, col = "cyan4", pch = 16, cex = 1.5) #measurements
+lines(max(P04$dist)-P04$dist, P04$X.13C, col = "cyan4", lwd = 2, lty = 2)
 # write output to csv
 # outputfile <- paste(tooth.name, "_inverse_model_output.csv", sep = "")
 # write.csv(all.out, file = outputfile)

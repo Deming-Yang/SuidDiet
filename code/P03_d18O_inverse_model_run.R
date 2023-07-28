@@ -24,9 +24,9 @@ projectname <- "Extant suid diet"
 
 #### read in isotope data ####
 
-tooth.name <- "P04"
+tooth.name <- "P03"
 
-tooth.data <- P04
+tooth.data <- P03
 
 #order tooth data by dist
 tooth.data <- tooth.data[order(tooth.data$dist, decreasing = T),] 
@@ -61,7 +61,7 @@ r3 <- 2 #0.2 mm
 la <- 65 #molar: Yang et al., 2020: la = 65, lm = 35
 
 ## run the Emeas function to generate Emeas estimates
-set.seed(3456)
+set.seed(3456) 
 Emeasout <- Emeasfun(numtrials = numtrials, numsam = length(tooth.data$X.18O), length = tooth.data$Passey.length, 
          dMeas = round(tooth.data$X.18O, 1), r1 = r1, r2 = r2, r3 = r3, la = la)
 
@@ -73,12 +73,12 @@ Emeasout[[1]][1,,]
 # values of Emeas/Edist should be close to DPE values from mSolv code
 # adjust df stepwise to match Emeas/Edist to DPE
 
-Edist.P04.18O <- Emeasout[[2]] #record Edist
+Edist.P03.18O <- Emeasout[[2]] #record Edist
 
 #visualization
-plot(density(Edist.P04.18O))
-mean.edist.P04.18O <- mean(Edist.P04.18O)
-mean.edist.P04.18O
+plot(density(Edist.P03.18O))
+mean.edist.P03.18O <- mean(Edist.P03.18O)
+mean.edist.P03.18O
 
 Emeas.params <- list(numtrials = numtrials, r1 = r1, r2 = r2, r3 = r3, la = la)
 
@@ -99,7 +99,7 @@ Emeas.params <- list(numtrials = numtrials, r1 = r1, r2 = r2, r3 = r3, la = la)
 
 #### input paramaters ####
 
-nsolxns <- 200 # number of solutions to be computed
+nsolxns <- 120 # number of solutions to be computed
 dMeas <- round(tooth.data$X.18O, 1) # isotope data input
 numsam <- length(dMeas) # number of samples
 openindx <- 1 # degree of openendedness, less than lm, openended (profile mature) --> index = 1; 
@@ -145,7 +145,7 @@ S = matrix(0, nrow = numsam, ncol = nsolxns)
 # df - damping factor. Needs to be chosen to minimize difference between the estimated measurement error
 # (E~meas~) and the prediction error (E~pred~)
 
-set.seed(3456)
+set.seed(3456) 
 # write parameter input into a list for printing the model report
 mSolvparams <- list(nsolxns = nsolxns, openindx = openindx, lm = lm, la = la, finit = finit, maxlength = maxlength, minlength = minlength, 
                     mindepth = mindepth,r1 = r1, r2 = r2, r3 = r3, maxratio = maxratio, minratio = minratio, stdev = stdev, df = df)
@@ -164,7 +164,7 @@ toc()
 beep(sound = 2)
 
 plot(density(DPE), col = "blue")
-lines(density(Edist.P04.18O),col = "red")
+lines(density(Edist.P03.18O),col = "red")
 
 # # plot some example solutions of mSolv
 # 
@@ -240,13 +240,13 @@ tdataci.d$ci.length <- tdataci.d$ci.length/10
 # combine all output
 all.out <- cbind(solvout, tdataci.d)
 
-P04.all.out.18O <- all.out
+P03.all.out.18O <- all.out
 
 ######### plot out 95% CI #####
-plot(P04.all.out.18O$ci.length, P04.all.out.18O$mean, type = "l", lwd = 2, ylim = c(-1,8))
+plot(P03.all.out.18O$ci.length, P03.all.out.18O$mean, type = "l", lwd = 2, ylim = c(-1,8))
 tsdens(tdataci.d) # add 95% CI as gray shading
-points(max(P04$dist)-P04$dist, P04$X.18O, col = "cyan4", pch = 16, cex = 1.5) #measurements
-lines(max(P04$dist)-P04$dist, P04$X.18O, col = "cyan4", lwd = 2, lty = 2)
+points(max(P03$dist)-P04$dist, P03$X.18O, col = "cyan4", pch = 16, cex = 1.5) #measurements
+lines(max(P03$dist)-P04$dist, P03$X.18O, col = "cyan4", lwd = 2, lty = 2)
 # write output to csv
 # outputfile <- paste(tooth.name, "_inverse_model_output.csv", sep = "")
 # write.csv(all.out, file = outputfile)
