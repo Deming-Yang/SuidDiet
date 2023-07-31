@@ -16,7 +16,7 @@ library("beepr")
 
 # load inverse model functions
 
-source("code/Inverse_functions.R")
+source("code/Supp_Inverse_functions.R")
 
 # specify a project name for printing on  model reports
 
@@ -55,15 +55,15 @@ numtrials <- 100 # number of model solutions
 # r3 - (integer) sample depth 1-sigma reproducibility (in mm * 10)
 # la - (integer) length of apposition (in mm * 10) --> get species specific from literature
 
-r1 <- 0.2
+r1 <- 0.1
 r2 <- 1
 r3 <- 2 #0.2 mm
 la <- 65 #molar: Yang et al., 2020: la = 65, lm = 35
 
 ## run the Emeas function to generate Emeas estimates
-set.seed(3456)
-Emeasout <- Emeasfun(numtrials = numtrials, numsam = length(tooth.data$X.18O), length = tooth.data$Passey.length, 
-         dMeas = round(tooth.data$X.18O, 1), r1 = r1, r2 = r2, r3 = r3, la = la)
+set.seed(3456) 
+Emeasout <- Emeasfun(numtrials = numtrials, numsam = length(tooth.data$X.13C1750), length = tooth.data$Passey.length, 
+                     dMeas = round(tooth.data$X.13C1750, 1), r1 = r1, r2 = r2, r3 = r3, la = la)
 
 #check individual trials using the first index in the 3-d array
 Emeasout[[1]][1,,]
@@ -73,12 +73,12 @@ Emeasout[[1]][1,,]
 # values of Emeas/Edist should be close to DPE values from mSolv code
 # adjust df stepwise to match Emeas/Edist to DPE
 
-Edist.P04.18O <- Emeasout[[2]] #record Edist
+Edist.P04.13C1750 <- Emeasout[[2]] #record Edist
 
 #visualization
-plot(density(Edist.P04.18O))
-mean.edist.P04.18O <- mean(Edist.P04.18O)
-mean.edist.P04.18O
+plot(density(Edist.P04.13C1750))
+mean.edist.P04.13C1750 <- mean(Edist.P04.13C1750)
+mean.edist.P04.13C1750
 
 Emeas.params <- list(numtrials = numtrials, r1 = r1, r2 = r2, r3 = r3, la = la)
 
@@ -100,7 +100,7 @@ Emeas.params <- list(numtrials = numtrials, r1 = r1, r2 = r2, r3 = r3, la = la)
 #### input paramaters ####
 
 nsolxns <- 150 # number of solutions to be computed
-dMeas <- round(tooth.data$X.18O, 1) # isotope data input
+dMeas <- round(tooth.data$X.13C1750, 1) # isotope data input
 numsam <- length(dMeas) # number of samples
 openindx <- 1 # degree of openendedness, less than lm, openended (profile mature) --> index = 1; 
 # close ended (enamel immature) index = lm
@@ -123,13 +123,13 @@ minlength = 16
 # min depth of the reference vector
 mindepth = 5
 # maximum value of the reference vector
-maxratio = 6.2
+maxratio = 0.6
 # minimum value of the reference vector
-minratio = 1.7
+minratio = -4.9
 # sd for random draws that produce reference vector
 stdev = 1
 # damping factor
-df = 0.005
+df = 0.002
 
 #round to nearest higher integer
 numbefore=ceiling(la/avelength)
@@ -145,7 +145,7 @@ S = matrix(0, nrow = numsam, ncol = nsolxns)
 # df - damping factor. Needs to be chosen to minimize difference between the estimated measurement error
 # (E~meas~) and the prediction error (E~pred~)
 
-set.seed(3456)
+set.seed(3456) 
 # write parameter input into a list for printing the model report
 mSolvparams <- list(nsolxns = nsolxns, openindx = openindx, lm = lm, la = la, finit = finit, maxlength = maxlength, minlength = minlength, 
                     mindepth = mindepth,r1 = r1, r2 = r2, r3 = r3, maxratio = maxratio, minratio = minratio, stdev = stdev, df = df)
@@ -157,16 +157,16 @@ mSolvparams <- list(nsolxns = nsolxns, openindx = openindx, lm = lm, la = la, fi
 # everything needs to be selected from tic() until beep() and executed together
 tic()
 solvout <- mSolv_fun(nsolxns = nsolxns, numsam = numsam, finit = finit, la = la, lm = lm, openindx = 1, avelength = avelength, 
-                    maxlength = maxlength, minlength = minlength, mindepth = mindepth, length = tooth.data$Passey.length,
-                    dMeas = dMeas, r1 = r1, r2 = r2, r3 = r3, maxratio = maxratio, minratio = minratio, 
-                    stdev = stdev, df = df, depth = depth)
+                     maxlength = maxlength, minlength = minlength, mindepth = mindepth, length = tooth.data$Passey.length,
+                     dMeas = dMeas, r1 = r1, r2 = r2, r3 = r3, maxratio = maxratio, minratio = minratio, 
+                     stdev = stdev, df = df, depth = depth)
 toc()
 beep(sound = 2)
 
 plot(density(DPE), col = "blue")
-lines(density(Edist.P04.18O),col = "red")
+lines(density(Edist.P04.13C),col = "red")
 
-P04.18O.DPE <- mean(DPE)
+P04.13C.DPE <- mean(DPE)
 
 # # plot some example solutions of mSolv
 # 
@@ -184,7 +184,7 @@ P04.18O.DPE <- mean(DPE)
 #   geom_line(aes(x = totallength, y = trial8), colour = "lightblue")+
 #   geom_line(aes(x = totallength, y = trial9), colour = "lightblue")+
 #   geom_line(aes(x = totallength, y = trial10), colour = "lightblue")
-  
+
 
 #### evaluate DPE (= Epred, prediction error) vs Edist (= Emeas, estimated measurement error) ####
 
@@ -213,7 +213,8 @@ P04.18O.DPE <- mean(DPE)
 
 # extract only trial output
 
-tdata <- solvout %>%  select(-callength)
+tdata <- solvout %>%
+  select(-callength)
 
 # transpose
 tdatatrans <- t(tdata)
@@ -239,12 +240,12 @@ tdataci.d <- as.data.frame(tdataci)
 # convert lengths back into mm
 tdataci.d$ci.length <- tdataci.d$ci.length/10
 
-P04.18O.CI <- tdataci.d
+P04.13C.CI <- tdataci.d
 
 # combine all output
 all.out <- cbind(solvout, tdataci.d)
 
-P04.all.out.18O <- all.out
+P04.all.out.13C <- all.out
 
 # write output to csv
 # outputfile <- paste(tooth.name, "_inverse_model_output.csv", sep = "")
