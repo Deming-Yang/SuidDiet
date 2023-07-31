@@ -58,7 +58,7 @@ numtrials <- 100 # number of model solutions
 r1 <- 0.2
 r2 <- 1
 r3 <- 2 #0.2 mm
-la <- 65 #molar: Yang et al., 2020: la = 65, lm = 35
+la <- 50 #canine: Yang et al., 2020: la = 50, lm = 85
 
 ## run the Emeas function to generate Emeas estimates
 set.seed(3456) 
@@ -106,30 +106,30 @@ openindx <- 1 # degree of openendedness, less than lm, openended (profile mature
 # close ended (enamel immature) index = lm
 avelength <- round(mean(tooth.data$Passey.length), digits = 0) # average sample length
 # length of maturation
-lm <- 35 #in mm*10
+lm <- 85 #in mm*10
 #length of apposition in mm
 lamm <- la/10
 # enter sample depth as fraction (0 - 1) of la in mm*10
 # (given in original data as fraction of enamel thickness)
 depth <- round(0.7*la, 1)
-finit <- 0.47 # initial mineral %weight, Yang et al., 2020
+finit <- 0.45 # initial mineral %weight, Yang et al., 2020
 
 # input parameters of the reference vector
 
 # max sample length of the reference vector
-maxlength = 33
+maxlength = 60
 # min sample length of the reference vector
-minlength = 16
+minlength = 50
 # min depth of the reference vector
 mindepth = 5
 # maximum value of the reference vector
-maxratio = 6.2
+maxratio = 1.7
 # minimum value of the reference vector
-minratio = 1.7
+minratio = -2.9
 # sd for random draws that produce reference vector
 stdev = 1
 # damping factor
-df = 0.01
+df = 0.012
 
 #round to nearest higher integer
 numbefore=ceiling(la/avelength)
@@ -165,6 +165,8 @@ beep(sound = 2)
 
 plot(density(DPE), col = "blue")
 lines(density(Edist.P03.18O),col = "red")
+
+P03.18O.DPE <- mean(DPE)
 
 # # plot some example solutions of mSolv
 # 
@@ -237,16 +239,13 @@ tdataci.d <- as.data.frame(tdataci)
 # convert lengths back into mm
 tdataci.d$ci.length <- tdataci.d$ci.length/10
 
+P03.18O.CI <- tdataci.d
+
 # combine all output
 all.out <- cbind(solvout, tdataci.d)
 
 P03.all.out.18O <- all.out
 
-######### plot out 95% CI #####
-plot(P03.all.out.18O$ci.length, P03.all.out.18O$mean, type = "l", lwd = 2, ylim = c(-1,8))
-tsdens(tdataci.d) # add 95% CI as gray shading
-points(max(P03$dist)-P04$dist, P03$X.18O, col = "cyan4", pch = 16, cex = 1.5) #measurements
-lines(max(P03$dist)-P04$dist, P03$X.18O, col = "cyan4", lwd = 2, lty = 2)
 # write output to csv
 # outputfile <- paste(tooth.name, "_inverse_model_output.csv", sep = "")
 # write.csv(all.out, file = outputfile)

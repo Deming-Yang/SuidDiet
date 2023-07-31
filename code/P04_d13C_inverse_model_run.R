@@ -55,15 +55,15 @@ numtrials <- 100 # number of model solutions
 # r3 - (integer) sample depth 1-sigma reproducibility (in mm * 10)
 # la - (integer) length of apposition (in mm * 10) --> get species specific from literature
 
-r1 <- 0.2
+r1 <- 0.1
 r2 <- 1
 r3 <- 2 #0.2 mm
 la <- 65 #molar: Yang et al., 2020: la = 65, lm = 35
 
 ## run the Emeas function to generate Emeas estimates
 set.seed(3456) 
-Emeasout <- Emeasfun(numtrials = numtrials, numsam = length(tooth.data$X.13C), length = tooth.data$Passey.length, 
-                     dMeas = round(tooth.data$X.13C, 1), r1 = r1, r2 = r2, r3 = r3, la = la)
+Emeasout <- Emeasfun(numtrials = numtrials, numsam = length(tooth.data$X.13C1750), length = tooth.data$Passey.length, 
+                     dMeas = round(tooth.data$X.13C1750, 1), r1 = r1, r2 = r2, r3 = r3, la = la)
 
 #check individual trials using the first index in the 3-d array
 Emeasout[[1]][1,,]
@@ -73,12 +73,12 @@ Emeasout[[1]][1,,]
 # values of Emeas/Edist should be close to DPE values from mSolv code
 # adjust df stepwise to match Emeas/Edist to DPE
 
-Edist.P04.13C <- Emeasout[[2]] #record Edist
+Edist.P04.13C1750 <- Emeasout[[2]] #record Edist
 
 #visualization
-plot(density(Edist.P04.18O))
-mean.edist.P04.13C <- mean(Edist.P04.13C)
-mean.edist.P04.13C
+plot(density(Edist.P04.13C1750))
+mean.edist.P04.13C1750 <- mean(Edist.P04.13C1750)
+mean.edist.P04.13C1750
 
 Emeas.params <- list(numtrials = numtrials, r1 = r1, r2 = r2, r3 = r3, la = la)
 
@@ -99,8 +99,8 @@ Emeas.params <- list(numtrials = numtrials, r1 = r1, r2 = r2, r3 = r3, la = la)
 
 #### input paramaters ####
 
-nsolxns <- 200 # number of solutions to be computed
-dMeas <- round(tooth.data$X.13C, 1) # isotope data input
+nsolxns <- 150 # number of solutions to be computed
+dMeas <- round(tooth.data$X.13C1750, 1) # isotope data input
 numsam <- length(dMeas) # number of samples
 openindx <- 1 # degree of openendedness, less than lm, openended (profile mature) --> index = 1; 
 # close ended (enamel immature) index = lm
@@ -129,7 +129,7 @@ minratio = -4.9
 # sd for random draws that produce reference vector
 stdev = 1
 # damping factor
-df = 0.005
+df = 0.002
 
 #round to nearest higher integer
 numbefore=ceiling(la/avelength)
@@ -165,6 +165,8 @@ beep(sound = 2)
 
 plot(density(DPE), col = "blue")
 lines(density(Edist.P04.13C),col = "red")
+
+P04.13C.DPE <- mean(DPE)
 
 # # plot some example solutions of mSolv
 # 
@@ -238,16 +240,13 @@ tdataci.d <- as.data.frame(tdataci)
 # convert lengths back into mm
 tdataci.d$ci.length <- tdataci.d$ci.length/10
 
+P04.13C.CI <- tdataci.d
+
 # combine all output
 all.out <- cbind(solvout, tdataci.d)
 
 P04.all.out.13C <- all.out
 
-######### plot out 95% CI #####
-plot(P04.all.out.13C$ci.length, P04.all.out.13C$mean, type = "l", lwd = 2, ylim = c(-8,3))
-tsdens(tdataci.d) # add 95% CI as gray shading
-points(max(P04$dist)-P04$dist, P04$X.13C, col = "cyan4", pch = 16, cex = 1.5) #measurements
-lines(max(P04$dist)-P04$dist, P04$X.13C, col = "cyan4", lwd = 2, lty = 2)
 # write output to csv
 # outputfile <- paste(tooth.name, "_inverse_model_output.csv", sep = "")
 # write.csv(all.out, file = outputfile)

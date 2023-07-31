@@ -99,7 +99,7 @@ Emeas.params <- list(numtrials = numtrials, r1 = r1, r2 = r2, r3 = r3, la = la)
 
 #### input paramaters ####
 
-nsolxns <- 200 # number of solutions to be computed
+nsolxns <- 150 # number of solutions to be computed
 dMeas <- round(tooth.data$X.18O, 1) # isotope data input
 numsam <- length(dMeas) # number of samples
 openindx <- 1 # degree of openendedness, less than lm, openended (profile mature) --> index = 1; 
@@ -129,7 +129,7 @@ minratio = 1.7
 # sd for random draws that produce reference vector
 stdev = 1
 # damping factor
-df = 0.01
+df = 0.005
 
 #round to nearest higher integer
 numbefore=ceiling(la/avelength)
@@ -165,6 +165,8 @@ beep(sound = 2)
 
 plot(density(DPE), col = "blue")
 lines(density(Edist.P04.18O),col = "red")
+
+P04.18O.DPE <- mean(DPE)
 
 # # plot some example solutions of mSolv
 # 
@@ -237,16 +239,13 @@ tdataci.d <- as.data.frame(tdataci)
 # convert lengths back into mm
 tdataci.d$ci.length <- tdataci.d$ci.length/10
 
+P04.18O.CI <- tdataci.d
+
 # combine all output
 all.out <- cbind(solvout, tdataci.d)
 
 P04.all.out.18O <- all.out
 
-######### plot out 95% CI #####
-plot(P04.all.out.18O$ci.length, P04.all.out.18O$mean, type = "l", lwd = 2, ylim = c(-1,8))
-tsdens(tdataci.d) # add 95% CI as gray shading
-points(max(P04$dist)-P04$dist, P04$X.18O, col = "cyan4", pch = 16, cex = 1.5) #measurements
-lines(max(P04$dist)-P04$dist, P04$X.18O, col = "cyan4", lwd = 2, lty = 2)
 # write output to csv
 # outputfile <- paste(tooth.name, "_inverse_model_output.csv", sep = "")
 # write.csv(all.out, file = outputfile)
