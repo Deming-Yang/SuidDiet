@@ -59,7 +59,7 @@ tsdens = function(d, base = "black"){
 
 ###############plotting quasi-sympatric datasets###############
 ###############set 1: DR Congo ###############
-par(mfrow=c(3,1))
+par(mfrow=c(1,3))
 #P01 Potamochoerus
 plot(P01$X.13C1750.corr, P01$X.18O, main = "d13C - d18O biplot: ",
      xlim = c(-15,2),ylim = c(-5,7), xlab="d13C", ylab="d18O",
@@ -168,7 +168,7 @@ lines(max(P03$dist)-P03$dist, P03$X.13C1750.corr, col = "orange3", lwd = 2, lty 
 
 ######### P04 d13C inverse output + 95% CI #####
 ######### plot out 95% CI #####
-plot(P04.all.out.13C$ci.length, P04.all.out.13C$mean, type = "l", lwd = 2, ylim = c(-10,5),
+plot(P04.all.out.13C$ci.length, P04.all.out.13C$mean, type = "l", lwd = 2, ylim = c(-11,6),
      main = "P04 d13C inverse output", xlab = "length (mm)", ylab = "d13C1750")
 tsdens(P04.13C.CI) # add 95% CI as gray shading
 points(max(P04$dist)-P04$dist, P04$X.13C, col = "orange3", pch = 16, cex = 1.5) #measurements
@@ -182,7 +182,7 @@ points(max(P03$dist)-P03$dist, P03$X.18O, col = "cyan4", pch = 16, cex = 1.5) #m
 lines(max(P03$dist)-P03$dist, P03$X.18O, col = "cyan4", lwd = 2, lty = 2)
 
 ######### P04 d18O inverse output + 95% CI #####
-plot(P04.all.out.18O$ci.length, P04.all.out.18O$mean, type = "l", lwd = 2, ylim = c(-1,8),
+plot(P04.all.out.18O$ci.length, P04.all.out.18O$mean, type = "l", lwd = 2, ylim = c(-2,10),
      main = "P04 d18O inverse output", xlab = "length (mm)", ylab = "d18O")
 tsdens(P04.18O.CI) # add 95% CI as gray shading
 points(max(P04$dist)-P04$dist, P04$X.18O, col = "cyan4", pch = 16, cex = 1.5) #measurements
